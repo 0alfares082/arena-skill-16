@@ -1,18 +1,18 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "arena-skill",
+  "name": "arena-skill-16",
   "description": "The Arena skill for Claude Code",
   "owner": {
-    "name": "Jake Schincariol",
-    "url": "https://opusjake.ai"
+    "name": "Salman AlFares",
+    "url": "https://github.com/0alfares082"
   },
   "plugins": [
     {
-      "name": "arena-skill",
-      "description": "Spins up 100 sub-agents on the exact same task, each with a different strategy card, and runs them through an attack, defend and judge bracket until one answer survives.",
+      "name": "arena-skill-16",
+      "description": "Runs 16 competitors by default through the Arena tournament. Based on Jake Schincariol's MIT-licensed skill.",
       "source": "./",
       "category": "productivity",
-      "homepage": "https://github.com/Jakeschincariol/arena-skill"
+      "homepage": "https://github.com/0alfares082/arena-skill-16"
     }
   ]
 }

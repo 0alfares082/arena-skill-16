@@ -373,6 +373,18 @@ class Guards(TempDir):
         self.assertEqual(cli("init", "--quick", "--agents", 8, "--task", "t", "--dir", d + "4").returncode, 2)
         self.assertEqual(cli("init", "--agents", 4, "--task", "   ", "--dir", d + "5").returncode, 2)
 
+    def test_default_plan_is_16(self):
+        plan = json.loads(self.ok("plan", "--json"))
+        self.assertEqual((plan["agents"], plan["rounds"], plan["calls"]), (16, 4, 91))
+
+    def test_default_init_is_16(self):
+        d = os.path.join(self.tmp, "default")
+        self.ok("init", "--task", "t", "--dir", d)
+        state = load(d)
+        self.assertEqual(state["agents_n"], 16)
+        self.assertEqual(len(state["agents"]), 16)
+        self.assertEqual(len(state["rounds"][0]["matches"]), 8)
+
     def test_quick_is_16(self):
         d = os.path.join(self.tmp, "quick")
         self.ok("init", "--quick", "--task", "t", "--dir", d)

@@ -3,10 +3,10 @@
 
 The whole arena lives in one JSON file (arena.json), so the orchestrator never
 loses track of who is alive, who fought whom and what happens next, even if its
-own context gets compacted halfway through a 100-agent run.
+own context gets compacted halfway through a 16-agent run.
 
-    python3 bracket.py plan --agents 100             # rounds, sub-agent calls and waves. Writes nothing.
-    python3 bracket.py init --agents 100 --seed 7 --task-file task.md [--baseline-file old.md]
+    python3 bracket.py plan             # rounds, sub-agent calls and waves. Writes nothing.
+    python3 bracket.py init --seed 7 --task-file task.md [--baseline-file old.md]
     python3 bracket.py init --quick --task "..."     # 16 agents
     python3 bracket.py next                          # what to do now, and the exact command for it
     python3 bracket.py prompts <phase>               # write the sub-agent briefs, list the jobs left, in waves
@@ -40,7 +40,7 @@ STRATEGIES_PATH = os.path.join(HERE, "strategies.json")
 SKILL_PATH = os.path.join(HERE, "SKILL.md")
 RUBRIC_PATH = os.path.join(HERE, "rubric.md")
 
-DEFAULT_AGENTS = 100
+DEFAULT_AGENTS = 16
 QUICK_AGENTS = 16
 DEFAULT_WAVE = 10          # Claude Code runs at most 10 tool calls at once by default
 ROOT = ".arena"

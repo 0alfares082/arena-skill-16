@@ -1,8 +1,8 @@
 ---
 name: arena
 description: >-
-  Make 100 versions of Claude fight to the death over one task. Spins up N
-  sub-agents (default 100, --quick for 16), gives every one the exact same
+  Make 16 versions of Claude fight to the death over one task. Spins up N
+  sub-agents (default 16; --quick also uses 16), gives every one the exact same
   task plus a different strategy card (reasoning mode, workflow, strategy),
   then runs a single-elimination bracket: they attack each other's solutions,
   defend and revise, and a judge scores every match on a written rubric until
@@ -43,23 +43,22 @@ Read the flags out of the request. Everything that is not a flag is the task.
 
 | flag | meaning |
 | --- | --- |
-| `--agents N` | N competitors. Default 100. |
-| `--quick` | 16 competitors. The everyday setting. |
+| `--agents N` | N competitors. Default 16. |
+| `--quick` | 16 competitors. Compatibility alias for the default. |
 | `--seed S` | Fixes the cards and the pairings. Default: random, and recorded. |
 | `--wave W` | Sub-agents per wave. Default 10. Only raise it if the user raised Claude Code's limit. |
 
 No task text at all means: the task is the user's most recent request in this conversation, and your
 last answer to it is the baseline to beat.
 
-Run `ARENA plan --agents N` (or `--quick`). It prints the rounds, the sub-agent calls and the waves.
+Use N = 16 unless the user explicitly specifies another count. Run `ARENA plan` by default, or `ARENA plan --agents N` for an explicit override. It prints the rounds, the sub-agent calls and the waves.
 
 - **The user asked for the arena** (typed `/arena`, said "arena", or asked to make them compete):
-  tell them in one line how big it is, for example "100 agents, 7 rounds, 595 sub-agent calls", and
+  tell them in one line how big it is, for example "16 competitors, 4 rounds, 91 sub-agent calls", and
   start.
 - **This skill fired because the user is unhappy** ("that's wrong", "try again", "bad answer") and
-  never mentioned the arena: ask once before spending anything. Offer three options: the full arena
-  (100 agents, 595 sub-agent calls), `--quick` (16 agents, 91 calls), or an ordinary retry. Wait for
-  the answer.
+  never mentioned the arena: ask once before spending anything. Offer the default arena
+  (16 competitors, 91 sub-agent calls) or an ordinary retry. Wait for the answer.
 
 Sub-agents write their work into `.arena/` in the current directory. In the default permission mode
 that is one approval per file, which is hundreds on a big run. Before the spawn phase, suggest
@@ -80,7 +79,7 @@ on its own:
 - If there is an answer to beat: what the user disliked about it, in their words.
 
 Do not add requirements the user never gave. Do not write your own view of the right answer into it:
-that pushes 100 agents the same way, which is the opposite of the point.
+that pushes all competitors the same way, which is the opposite of the point.
 
 If there is an earlier answer the user was not satisfied with, write it word for word to
 `.arena/baseline.md`.
@@ -126,12 +125,12 @@ The order `next` takes you through:
   user rejected, blind to which is which. Then `ARENA collect`.
 - `next` prints DONE: go to step 5.
 
-After each `advance`, give the user one line, such as "Round 2 done: 25 of 100 left." Nothing more.
+After each `advance`, give the user one line, such as "Round 2 done: 4 of 16 left." Nothing more.
 Never paste pairings, attacks, verdicts or solutions into the chat.
 
 Why waves: Claude Code runs at most 10 tool calls at once by default (the
-`CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY` setting). So a 100-agent spawn is 10 waves of 10, and a
-100-agent arena is 70 waves in total, 71 with the final check.
+`CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY` setting). So a 16-competitor spawn is two waves (10 and 6), and a
+16-competitor arena is 16 waves in total, 17 with the final check.
 
 ## Step 5: the result
 
@@ -141,7 +140,7 @@ solution file you read in the whole run. Give the user:
 1. **The winning solution**, in full.
 2. **Why it won**: the attacks it survived, from `winner`, as a short list. Its card on one line
    (reasoning mode + workflow + strategy).
-3. **Rounds**: for example "7 rounds, 100 agents in, 1 left."
+3. **Rounds**: for example "4 rounds, 16 agents in, 1 left."
 4. **Against the answer you rejected**, if there was one: the final check's scores, honestly. If the
    old answer scored higher, say so plainly and show both.
 5. Where the full record lives: the run folder.
